@@ -1,0 +1,6 @@
+﻿  v8pp-example-embedding.cpp
+  Generating code
+  Previous IPDB and IOBJ mismatch, fall back to full compilation.
+  All 708 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Finished generating code
+  v8pp-example-embedding.vcxproj -> C:\Users\user\Downloads\v8pp-1.8.1\v8pp-1.8.1\Release\v8pp-example-embedding.exe

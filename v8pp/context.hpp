@@ -4,9 +4,9 @@
 #include <string>
 #include <map>
 
-#include <v8.h>
+#include "./v8.h"
 
-#include "v8pp/convert.hpp"
+#include "./convert.hpp"
 
 namespace v8pp {
 
