@@ -1,3 +1,19 @@
-/v8
-/v8*.nupkg
-*.pyc
+/bin/
+/docs/html/
+/docs/xml/
+/node_modules/
+/packages/
+/examples/*/build/
+/.vs
+/*.*sdf
+/*.suo
+/*.VC.db
+*.user
+*.exe
+*.so
+*.o
+*.a
+
+# Clion related ignores
+/cmake-build-*/
+/.idea/

@@ -1,83 +1,402 @@
-# NuGet package for V8 JavaScript Engine
+[![Build status](https://github.com/pmed/v8pp/actions/workflows/cmake.yml/badge.svg)](https://github.com/pmed/v8pp/actions/workflows/cmake.yml)
+[![NPM](https://img.shields.io/npm/v/v8pp.svg)](https://npmjs.com/package/v8pp)
+[![Join the chat at https://gitter.im/pmed/v8pp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pmed/v8pp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-This packages contain prebuilt V8 binaries, debug symbols, headers and
-libraries required to embed the V8 JavaScript engine into a C++ project.
+# v8pp
 
-| Package                     | Version
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------|
-|V8 x64 for Visual Studio 2022|[![NuGet](https://img.shields.io/nuget/v/v8-v143-x64.svg)](https://www.nuget.org/packages/v8-v143-x64/)|
-|V8 x86 for Visual Studio 2022|[![NuGet](https://img.shields.io/nuget/v/v8-v143-x86.svg)](https://www.nuget.org/packages/v8-v143-x86/)|
-|V8 x64 for Visual Studio 2019|[![NuGet](https://img.shields.io/nuget/v/v8-v142-x64.svg)](https://www.nuget.org/packages/v8-v142-x64/)|
-|V8 x86 for Visual Studio 2019|[![NuGet](https://img.shields.io/nuget/v/v8-v142-x86.svg)](https://www.nuget.org/packages/v8-v142-x86/)|
-|V8 x64 for Visual Studio 2017|[![NuGet](https://img.shields.io/nuget/v/v8-v141-x64.svg)](https://www.nuget.org/packages/v8-v141-x64/)|
-|V8 x86 for Visual Studio 2017|[![NuGet](https://img.shields.io/nuget/v/v8-v141-x86.svg)](https://www.nuget.org/packages/v8-v141-x86/)|
-|V8 x64 for Visual Studio 2015|[![NuGet](https://img.shields.io/nuget/v/v8-v140-x64.svg)](https://www.nuget.org/packages/v8-v140-x64/)|
-|V8 x86 for Visual Studio 2015|[![NuGet](https://img.shields.io/nuget/v/v8-v140-x86.svg)](https://www.nuget.org/packages/v8-v140-x86/)|
-|V8 x64 for Visual Studio 2013|[![NuGet](https://img.shields.io/nuget/v/v8-v120-x64.svg)](https://www.nuget.org/packages/v8-v120-x64/)|
-|V8 x86 for Visual Studio 2013|[![NuGet](https://img.shields.io/nuget/v/v8-v120-x86.svg)](https://www.nuget.org/packages/v8-v120-x86/)|
-|V8 x64 for Visual Studio 2017 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v141_xp-x64.svg)](https://www.nuget.org/packages/v8-v141_xp-x64/)|
-|V8 x86 for Visual Studio 2017 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v141_xp-x86.svg)](https://www.nuget.org/packages/v8-v141_xp-x86/)|
-|V8 x64 for Visual Studio 2015 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v140_xp-x64.svg)](https://www.nuget.org/packages/v8-v140_xp-x64/)|
-|V8 x86 for Visual Studio 2015 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v140_xp-x86.svg)](https://www.nuget.org/packages/v8-v140_xp-x86/)|
-|V8 x64 for Visual Studio 2013 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v120_xp-x64.svg)](https://www.nuget.org/packages/v8-v120_xp-x64/)|
-|V8 x86 for Visual Studio 2013 XP platform toolset|[![NuGet](https://img.shields.io/nuget/v/v8-v120_xp-x86.svg)](https://www.nuget.org/packages/v8-v120_xp-x86/)|
+Header-only library to expose C++ classes and functions into [V8](https://developers.google.com/v8/) to use them in JavaScript code. v8pp requires a compiler with C++14 support. The library has been tested on:
 
+  * Microsoft Visual C++ 2019 (Windows 10)
+  * GCC 5.4.0 (Ubuntu 16.04)
+  * Clang 5.0.0 (Ubuntu 16.04)
 
-## Usage
+## Building and testing
 
-To use V8 in a project install the package `v8-$PlatformToolset-$Platform.$Version`
-from a console with `nuget install` command or from inside of Visual Studio
-(see menu option *Tools -> NuGet Package Manager -> Manage NuGet Packages for Solution...*)
-where
+The library has a set of tests that can be configured, built, and run with CMake:
 
-  * `$PlatformToolset` is the C++ toolset version used in Visual Studio:
-    * `v120` - for Visual Studio 2013
-    * `v140` - for Visual Studio 2015
-    * `v141` - for Visual Studio 2017
-    * `v142` - for Visual Studio 2019
-    * `v120_xp` - for Visual Studio 2013 XP platform toolset
-    * `v140_xp` - for Visual Studio 2015 XP platform toolset
-    * `v141_xp` - for Visual Studio 2017 XP platform toolset
-  
-  * `$Platform` is a target platform type, currently `x86` or `x64`.
+```console
+~/v8pp$ mkdir out; cd out
+~/v8pp/out$ cmake -DCMAKE_BUILD_TYPE=Release -DBUILD_TESTING=ON ..
+~/v8pp/out$ make
+~/v8pp/out$ ctest -V
+```
 
-  * `$Version` is the actual V8 version, one of https://chromium.googlesource.com/v8/v8.git/+refs
+The full list of project options can be listed with cmake command:
 
-There are 3 package kinds:
+```console
+~/v8pp/out$ cmake -LH ..
+```
 
-  * `v8-$PlatformToolset-$Platform.$Version` - contains developer header and 
-    library files; depends on `v8.redist` package
+Some of them could be:
 
-  * `v8.redist-$PlatformToolset-$Platform.$Version` - prebuilt V8 binaries:
-    dlls, blobs, etc.
-
-  * `v8.symbols-$PlatformToolset-$Platform.$Version` - debug symbols for V8:
-    [pdb files](https://en.wikipedia.org/wiki/Program_database)
-
-After successful packages installation add `#include <v8.h>` in a C++  project
-and build it. All necessary files (*.lib, *.dll, *.pdb) would be referenced
-in the project automatically with MsBuild property sheets.
+> // Build documentation
+> BUILD_DOCUMENTATION:BOOL=OFF
+>
+> // Build shared library
+> BUILD_SHARED_LIBS:BOOL=ON
+>
+> // Build and run tests
+> BUILD_TESTING:BOOL=OFF
+>
+> // Header-only library
+> V8PP_HEADER_ONLY:BOOL=0
+>
+> // v8::Isolate data slot number, used in v8pp for shared data
+> V8PP_ISOLATE_DATA_SLOT:STRING=0
+>
+> // v8pp plugin initialization procedure name
+> V8PP_PLUGIN_INIT_PROC_NAME:STRING=v8pp_module_init
+>
+> // v8pp plugin filename suffix
+> V8PP_PLUGIN_SUFFIX:STRING=.dylib
+>
+> // Use std::string_view
+> V8PP_USE_STD_STRING_VIEW:BOOL=0
+>
+> // Use new V8 ABI with V8_COMPRESS_POINTERS and V8_31BIT_SMIS_ON_64BIT_ARCH
+> V8_COMPRESS_POINTERS:BOOL=ON
 
 
-## How to build
+## Binding example
 
-This section is mostly for the package maintainers who wants to update V8.
+v8pp supports V8 versions after 6.3 with `v8::Isolate` usage in API. There are 2 targets for binding:
+ 
+  * `v8pp::module`, a wrapper class around `v8::ObjectTemplate`
+  * `v8pp::class_`, a template class wrapper around `v8::FunctionTemplate`
 
-Tools required to build V8 NuGet package on Windows:
+Both of them require a pointer to `v8::Isolate` instance. They allows to bind from C++ code such items as variables, functions, constants with a function `set(name, item)`:
 
-  * Visual C++ toolset (version >=2013)
-  * Python 2.X
-  * Git
-  * NuGet (https://dist.nuget.org/index.html)
+```c++
+v8::Isolate* isolate;
 
-To build V8 and make NuGet packages:
+int var;
+int get_var() { return var + 1; }
+void set_var(int x) { var = x + 1; }
 
-  1. Run `build.py` with optional command-line arguments.
-  2. Publish `nuget/*.nupkg` files after successful build.
-  
-Build script `build.py` supports command-line arguments to specify package build options:
+struct X
+{
+    X(int v, bool u) : var(v) {}
+    int var;
+    int get() const { return var; }
+    void set(int x) { var = x; } 
+};
 
-  1. V8 version branch/tag name (or `V8_VERSION` environment variable), default is `lkgr` branch
-  2. Target platform (or `PLATFORM` evnironment variable), default is [`x86`, `x64`]
-  3. Configuration (or `CONFIGURATION` environment variable), default is [`Debug`, `Release`]
-  4. XP platofrm toolset usage flag (or `XP` environment variable), default is not set
+// bind free variables and functions
+v8pp::module mylib(isolate);
+mylib
+    // set read-only attribute
+    .set_const("PI", 3.1415)
+    // set variable available in JavaScript with name `var`
+    .set("var", var)
+    // set function get_var as `fun`
+    .set("fun", &get_var)
+    // set property `prop` with getter get_var() and setter set_var()
+    .set("prop", property(get_var, set_var));
+
+// bind class
+v8pp::class_<X> X_class(isolate);
+X_class
+    // specify X constructor signature
+    .ctor<int, bool>()
+    // bind variable
+    .set("var", &X::var)
+    // bind function
+    .set("fun", &X::set)
+    // bind read-only property
+    .set("prop", property(&X::get));
+
+// set class into the module template
+mylib.set("X", X_class);
+
+// set bindings in global object as `mylib`
+isolate->GetCurrentContext()->Global()->Set(
+    v8::String::NewFromUtf8(isolate, "mylib"), mylib.new_instance());
+```
+
+After that bindings will be available in JavaScript:
+```javascript
+mylib.var = mylib.PI + mylib.fun();
+var x = new mylib.X(1, true);
+mylib.prop = x.prop + x.fun();
+```
+
+## Node.js and io.js addons
+
+The library is suitable to make [Node.js](http://nodejs.org/) and [io.js](https://iojs.org/) addons. See [addons](docs/addons.md) document.
+
+```c++
+
+void RegisterModule(v8::Local<v8::Object> exports)
+{
+    v8pp::module addon(v8::Isolate::GetCurrent());
+
+    // set bindings... 
+    addon
+        .set("fun", &function)
+        .set("cls", my_class)
+        ;
+
+    // set bindings as exports object prototype
+    exports->SetPrototype(addon.new_instance());
+}
+```
+
+## v8pp also provides
+
+* `v8pp` - a static library to add several global functions (load/require to the v8 JavaScript context. `require()` is a system for loading plugins from shared libraries.
+* `test` - A binary for running JavaScript files in a context which has v8pp module loading functions provided.
+
+## v8pp module example
+
+```c++
+#include <iostream>
+
+#include <v8pp/module.hpp>
+
+namespace console {
+
+void log(v8::FunctionCallbackInfo<v8::Value> const& args)
+{
+    v8::HandleScope handle_scope(args.GetIsolate());
+
+    for (int i = 0; i < args.Length(); ++i)
+    {
+        if (i > 0) std::cout << ' ';
+        v8::String::Utf8Value str(args[i]);
+        std::cout <<  *str;
+    }
+    std::cout << std::endl;
+}
+
+v8::Local<v8::Value> init(v8::Isolate* isolate)
+{
+    v8pp::module m(isolate);
+    m.set("log", &log);
+    return m.new_instance();
+}
+
+} // namespace console
+```
+
+## Turning a v8pp module into a v8pp plugin
+
+```c++
+V8PP_PLUGIN_INIT(v8::Isolate* isolate)
+{
+    return console::init(isolate);
+}
+```
+
+## v8pp class binding example
+
+```c++
+#include <v8pp/module.hpp>
+#include <v8pp/class.hpp>
+
+#include <fstream>
+
+namespace file {
+
+bool rename(char const* src, char const* dest)
+{
+    return std::rename(src, dest) == 0;
+}
+
+class file_base
+{
+public:
+    bool is_open() const { return stream_.is_open(); }
+    bool good() const { return stream_.good(); }
+    bool eof() const { return stream_.eof(); }
+    void close() { stream_.close(); }
+
+protected:
+    std::fstream stream_;
+};
+
+class file_writer : public file_base
+{
+public:
+    explicit file_writer(v8::FunctionCallbackInfo<v8::Value> const& args)
+    {
+        if (args.Length() == 1)
+        {
+            v8::String::Utf8Value str(args[0]);
+            open(*str);
+        }
+    }
+
+    bool open(char const* path)
+    {
+        stream_.open(path, std::ios_base::out);
+        return stream_.good();
+    }
+
+    void print(v8::FunctionCallbackInfo<v8::Value> const& args)
+    {
+        v8::HandleScope scope(args.GetIsolate());
+
+        for (int i = 0; i < args.Length(); ++i)
+        {
+            if (i > 0) stream_ << ' ';
+            v8::String::Utf8Value str(args[i]);
+            stream_ << *str;
+        }
+    }
+
+    void println(v8::FunctionCallbackInfo<v8::Value> const& args)
+    {
+        print(args);
+        stream_ << std::endl;
+    }
+};
+
+class file_reader : public file_base
+{
+public:
+    explicit file_reader(char const* path)
+    {
+        open(path);
+    }
+
+    bool open(const char* path)
+    {
+        stream_.open(path, std::ios_base::in);
+        return stream_.good();
+    }
+
+    v8::Local<v8::Value> getline(v8::Isolate* isolate)
+    {
+        if ( stream_.good() && ! stream_.eof())
+        {
+            std::string line;
+            std::getline(stream_, line);
+            return v8pp::to_v8(isolate, line);
+        }
+        else
+        {
+            return v8::Undefined(isolate);
+        }
+    }
+};
+
+v8::Local<v8::Value> init(v8::Isolate* isolate)
+{
+    v8::EscapableHandleScope scope(isolate);
+
+    // file_base binding, no .ctor() specified, object creation disallowed in JavaScript
+    v8pp::class_<file_base> file_base_class(isolate);
+    file_base_class
+        .set("close", &file_base::close)
+        .set("good", &file_base::good)
+        .set("is_open", &file_base::is_open)
+        .set("eof", &file_base::eof)
+        ;
+
+    // .ctor<> template arguments declares types of file_writer constructor
+    // file_writer inherits from file_base_class
+    v8pp::class_<file_writer> file_writer_class(isolate);
+    file_writer_class
+        .ctor<v8::FunctionCallbackInfo<v8::Value> const&>()
+        .inherit<file_base>()
+        .set("open", &file_writer::open)
+        .set("print", &file_writer::print)
+        .set("println", &file_writer::println)
+        ;
+
+    // .ctor<> template arguments declares types of file_reader constructor.
+    // file_base inherits from file_base_class
+    v8pp::class_<file_reader> file_reader_class(isolate);
+    file_reader_class
+        .ctor<char const*>()
+        .inherit<file_base>()
+        .set("open", &file_reader::open)
+        .set("getln", &file_reader::getline)
+        ;
+
+    // Create a module to add classes and functions to and return a
+    // new instance of the module to be embedded into the v8 context
+    v8pp::module m(isolate);
+    m.set("rename", &rename)
+     .set("writer", file_writer_class)
+     .set("reader", file_reader_class)
+        ;
+
+    return scope.Escape(m.new_instance());
+}
+
+} // namespace file
+
+V8PP_PLUGIN_INIT(v8::Isolate* isolate)
+{
+    return file::init(isolate);
+}
+```
+
+## Creating a v8 context capable of using require() function
+
+```c++
+#include <v8pp/context.hpp>
+
+v8pp::context context;
+context.set_lib_path("path/to/plugins/lib");
+// script can now use require() function. An application
+// that uses v8pp::context must link against v8pp library.
+v8::HandleScope scope(context.isolate());
+context.run_file("some_file.js");
+```
+
+## Using require() from JavaScript
+
+```javascript
+// Load the file module from the class binding example and the
+// console module.
+var file    = require('file'),
+    console = require('console')
+
+var writer = new file.writer("file")
+if (writer.is_open()) {
+    writer.println("some text")
+    writer.close()
+    if (! file.rename("file", "newfile"))
+        console.log("could not rename file")
+}
+else console.log("could not open `file'")
+
+console.log("exit")
+```
+
+## Create a handle to an externally referenced C++ class.
+
+```c++
+// Memory for C++ class will remain when JavaScript object is deleted.
+// Useful for classes you only wish to inject.
+typedef v8pp::class_<my_class> my_class_wrapper;
+v8::Local<v8::Value> val = my_class_wrapper::reference_external(isolate, &my_class::instance());
+// Assuming my_class::instance() returns reference to class
+```
+
+## Import externally created C++ class into v8pp.
+
+```c++
+// Memory for c++ object will be reclaimed by JavaScript using "delete" when
+// JavaScript class is deleted.
+typedef v8pp::class_<my_class> my_class_wrapper;
+v8::Local<v8::Value> val = my_class_wrapper::import_external(isolate, new my_class);
+```
+
+## Compile-time configuration
+
+The library uses several preprocessor macros, defined in `v8pp/config.hpp` file:
+
+  * `V8PP_ISOLATE_DATA_SLOT` - A v8::Isolate data slot number, used to store v8pp internal data
+  * `V8PP_PLUGIN_INIT_PROC_NAME` - Plugin initialization procedure name that should be exported from a v8pp plugin.
+  * `V8PP_PLUGIN_SUFFIX` - Plugin filename suffix that would be added if the plugin name used in `require()` doesn't end with it.
+  * `V8PP_HEADER_ONLY` - Use header-only implemenation, enabled by default.
+
+## v8pp alternatives
+
+* [nbind](https://github.com/charto/nbind)
+* [vu8](https://github.com/tsa/vu8), abandoned
+* [v8-juice](http://code.google.com/p/v8-juice/), abandoned
+* Script bindng in [cpgf](https://github.com/cpgf/cpgf)
