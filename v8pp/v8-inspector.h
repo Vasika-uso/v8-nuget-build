@@ -62,7 +62,7 @@ class V8_EXPORT StringView {
 
 class V8_EXPORT StringBuffer {
  public:
-  virtual ~StringBuffer() = default;
+  virtual ~StringBuffer() {}
   virtual const StringView& string() = 0;
   // This method copies contents.
   static std::unique_ptr<StringBuffer> create(const StringView&);
@@ -99,7 +99,6 @@ class V8_EXPORT V8ContextInfo {
 
 class V8_EXPORT V8StackTrace {
  public:
-  virtual StringView firstNonEmptySourceURL() const = 0;
   virtual bool isEmpty() const = 0;
   virtual StringView topSourceURL() const = 0;
   virtual int topLineNumber() const = 0;
@@ -107,7 +106,7 @@ class V8_EXPORT V8StackTrace {
   virtual StringView topScriptId() const = 0;
   virtual StringView topFunctionName() const = 0;
 
-  virtual ~V8StackTrace() = default;
+  virtual ~V8StackTrace() {}
   virtual std::unique_ptr<protocol::Runtime::API::StackTrace>
   buildInspectorObject() const = 0;
   virtual std::unique_ptr<StringBuffer> toString() const = 0;
@@ -118,13 +117,13 @@ class V8_EXPORT V8StackTrace {
 
 class V8_EXPORT V8InspectorSession {
  public:
-  virtual ~V8InspectorSession() = default;
+  virtual ~V8InspectorSession() {}
 
   // Cross-context inspectable values (DOM nodes in different worlds, etc.).
   class V8_EXPORT Inspectable {
    public:
     virtual v8::Local<v8::Value> get(v8::Local<v8::Context>) = 0;
-    virtual ~Inspectable() = default;
+    virtual ~Inspectable() {}
   };
   virtual void addInspectedObject(std::unique_ptr<Inspectable>) = 0;
 
@@ -150,9 +149,8 @@ class V8_EXPORT V8InspectorSession {
 
   // Remote objects.
   virtual std::unique_ptr<protocol::Runtime::API::RemoteObject> wrapObject(
-      v8::Local<v8::Context>, v8::Local<v8::Value>, const StringView& groupName,
-      bool generatePreview) = 0;
-
+      v8::Local<v8::Context>, v8::Local<v8::Value>,
+      const StringView& groupName) = 0;
   virtual bool unwrapObject(std::unique_ptr<StringBuffer>* error,
                             const StringView& objectId, v8::Local<v8::Value>*,
                             v8::Local<v8::Context>*,
@@ -162,7 +160,7 @@ class V8_EXPORT V8InspectorSession {
 
 class V8_EXPORT V8InspectorClient {
  public:
-  virtual ~V8InspectorClient() = default;
+  virtual ~V8InspectorClient() {}
 
   virtual void runMessageLoopOnPause(int contextGroupId) {}
   virtual void quitMessageLoopOnPause() {}
@@ -215,37 +213,17 @@ class V8_EXPORT V8InspectorClient {
   virtual bool canExecuteScripts(int contextGroupId) { return true; }
 
   virtual void maxAsyncCallStackDepthChanged(int depth) {}
-
-  virtual std::unique_ptr<StringBuffer> resourceNameToUrl(
-      const StringView& resourceName) {
-    return nullptr;
-  }
-};
-
-// These stack trace ids are intended to be passed between debuggers and be
-// resolved later. This allows to track cross-debugger calls and step between
-// them if a single client connects to multiple debuggers.
-struct V8_EXPORT V8StackTraceId {
-  uintptr_t id;
-  std::pair<int64_t, int64_t> debugger_id;
-
-  V8StackTraceId();
-  V8StackTraceId(uintptr_t id, const std::pair<int64_t, int64_t> debugger_id);
-  ~V8StackTraceId() = default;
-
-  bool IsInvalid() const;
 };
 
 class V8_EXPORT V8Inspector {
  public:
   static std::unique_ptr<V8Inspector> create(v8::Isolate*, V8InspectorClient*);
-  virtual ~V8Inspector() = default;
+  virtual ~V8Inspector() {}
 
   // Contexts instrumentation.
   virtual void contextCreated(const V8ContextInfo&) = 0;
   virtual void contextDestroyed(v8::Local<v8::Context>) = 0;
   virtual void resetContextGroup(int contextGroupId) = 0;
-  virtual v8::MaybeLocal<v8::Context> contextById(int contextId) = 0;
 
   // Various instrumentation.
   virtual void idleStarted() = 0;
@@ -259,11 +237,6 @@ class V8_EXPORT V8Inspector {
   virtual void asyncTaskFinished(void* task) = 0;
   virtual void allAsyncTasksCanceled() = 0;
 
-  virtual V8StackTraceId storeCurrentStackTrace(
-      const StringView& description) = 0;
-  virtual void externalAsyncTaskStarted(const V8StackTraceId& parent) = 0;
-  virtual void externalAsyncTaskFinished(const V8StackTraceId& parent) = 0;
-
   // Exceptions instrumentation.
   virtual unsigned exceptionThrown(
       v8::Local<v8::Context>, const StringView& message,
@@ -276,7 +249,7 @@ class V8_EXPORT V8Inspector {
   // Connection.
   class V8_EXPORT Channel {
    public:
-    virtual ~Channel() = default;
+    virtual ~Channel() {}
     virtual void sendResponse(int callId,
                               std::unique_ptr<StringBuffer> message) = 0;
     virtual void sendNotification(std::unique_ptr<StringBuffer> message) = 0;

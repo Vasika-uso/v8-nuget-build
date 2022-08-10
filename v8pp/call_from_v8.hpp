@@ -5,8 +5,8 @@
 
 #include <v8.h>
 
-#include "v8pp/convert.hpp"
-#include "v8pp/utility.hpp"
+#include "convert.hpp"
+#include "utility.hpp"
 
 namespace v8pp { namespace detail {
 

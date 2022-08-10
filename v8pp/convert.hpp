@@ -1,7 +1,7 @@
 #ifndef V8PP_CONVERT_HPP_INCLUDED
 #define V8PP_CONVERT_HPP_INCLUDED
 
-#include "./v8.h"
+#include <v8.h>
 
 #include <climits>
 #include <limits>
@@ -9,8 +9,8 @@
 #include <stdexcept>
 #include <type_traits>
 
-#include "../v8pp/ptr_traits.hpp"
-#include "../v8pp/utility.hpp"
+#include "ptr_traits.hpp"
+#include "utility.hpp"
 
 namespace v8pp {
 

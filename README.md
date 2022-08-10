@@ -2,10 +2,6 @@
 [![NPM](https://img.shields.io/npm/v/v8pp.svg)](https://npmjs.com/package/v8pp)
 [![Join the chat at https://gitter.im/pmed/v8pp](https://badges.gitter.im/Join%20Chat.svg)](https://gitter.im/pmed/v8pp?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
 
-# ---------------                                                          
-> Build using info at https://explorerplusplus.com/blog/2019/03/07/embedding-v8-c++-application                                    
-
-
 # v8pp
 
 Header-only library to expose C++ classes and functions into [V8](https://developers.google.com/v8/) to use them in JavaScript code. v8pp requires a compiler with C++14 support. The library has been tested on:

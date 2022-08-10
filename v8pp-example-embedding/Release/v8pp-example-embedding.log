@@ -1,6 +1,4 @@
 ﻿  v8pp-example-embedding.cpp
-  Generating code
-  Previous IPDB and IOBJ mismatch, fall back to full compilation.
-  All 708 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
-  Finished generating code
-  v8pp-example-embedding.vcxproj -> C:\Users\user\Downloads\v8pp-1.8.1\v8pp-1.8.1\Release\v8pp-example-embedding.exe
+C:\Users\user\Downloads\v8pp-1.8.1\v8pp-1.8.1\v8pp-example-embedding\v8pp-example-embedding.cpp(31,10): error C2039: 'ShutdownPlatform': is not a member of 'v8::V8'
+C:\Users\user\Downloads\v8pp-1.8.1\v8pp-1.8.1\v8pp\v8-initialization.h(58): message : see declaration of 'v8::V8'
+C:\Users\user\Downloads\v8pp-1.8.1\v8pp-1.8.1\v8pp-example-embedding\v8pp-example-embedding.cpp(31,26): error C3861: 'ShutdownPlatform': identifier not found

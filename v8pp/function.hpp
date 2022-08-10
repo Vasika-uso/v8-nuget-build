@@ -4,10 +4,10 @@
 #include <tuple>
 #include <type_traits>
 
-#include "v8pp/call_from_v8.hpp"
-#include "v8pp/ptr_traits.hpp"
-#include "v8pp/throw_ex.hpp"
-#include "v8pp/utility.hpp"
+#include "call_from_v8.hpp"
+#include "ptr_traits.hpp"
+#include "throw_ex.hpp"
+#include "utility.hpp"
 
 namespace v8pp {
 
